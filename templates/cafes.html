@@ -1,0 +1,109 @@
+{% extends 'bootstrap/base.html' %}
+
+{% block styles %}
+    {{ super() }}
+    <link rel="stylesheet" href="/static/css/styles.css">
+{% endblock %}
+
+{% block title %}Restaurants{% endblock %}
+
+{% block navbar %}
+    <nav class="navbar navbar-default navbar-static-top">
+      <div class="container">
+        <div class="navbar-header">
+          <a class="navbar-brand" href="{{ url_for('home') }}">Coffee House</a>
+        </div>
+      </div>
+    </nav>
+{% endblock %}
+{% block content %}
+
+<div class="container">
+  <div class="row">
+    <div class="col-sm-12">
+
+      <h1>All Cafes</h1>
+
+	  <table class="table table-dark table-hover">
+          {% for cafe in cafes %}
+            {%- if cafes.index(cafe) == 0 %}
+                <thead>
+                    <tr>
+                        {% for headers in cafe %}
+                            <th scope="col">{{ headers }}</th>
+                        {% endfor %}
+                    </tr>
+                </thead>
+            {% else %}
+                <tbody>
+                {% for headers in cafe %}
+                    <tr>
+                        {% for data in headers %}
+                            {% if headers.index(data) == 1 %}
+                                <td scope="row" class="quetn table_">
+                                    <a href='{{ headers }}  ' target="_blank">Map Link</a>
+                                </td>
+                            {% else %}
+                                <td scope="row" class="quetn table_">
+                                    {{ data }}
+                                </td>
+                            {% endif %}
+                        {% endfor %}
+                    </tr>
+                {% endfor %}
+                </tbody>
+            {% endif %}
+          {%- endfor %}
+  	  </table>
+        <div>
+            <p><a href="/add">Add another cafe?</a><a class="add_cafe" href="#bannerformmodal" data-toggle="modal" data-target="#bannerformmodal">Delete a Cafe from the list?</a></p>
+        </div>
+
+
+
+        <div class="modal fade bannerformmodal" tabindex="-1" role="dialog" aria-labelledby="bannerformmodal" aria-hidden="true" id="bannerformmodal">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+
+                        <div class="modal-header" align="center">
+                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                            <h4 class="modal-title" id="myModalLabel" style="color:black;">Delete a cafe from the list</h4>
+                        </div>
+
+                        <div class="modal-body" align="center">
+                            <div class="dropdown" align="center">
+                              <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="color: black;">
+                                Select which Café details you want to delete from your list   <span class="caret">   </span>
+                              </button>
+                              <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                  {% for cafe in cafes %}
+                                    {% if cafes.index(cafe) != 0 %}
+                                        {% for name in cafe %}
+                                            {% for data in name %}
+                                                {% if name.index(data) == 0 and name != "Cafe Name" %}
+                                                    <li><a class="dropdown-item" href="{{ url_for('delete', cafe = name[0])}}">{{ name[0] }}</a></li>
+                                                {% endif %}
+                                            {% endfor %}
+                                        {% endfor %}
+                                    {% endif %}
+                                  {% endfor %}
+                              </ul>
+                            </div>
+
+                        </div>
+
+<!--                        <div class="modal-footer">-->
+<!--                            <button type="button" class="btn btn-blue">Submit</button>-->
+<!--                        </div>-->
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+  </div>
+</div>
+
+{% endblock %}
